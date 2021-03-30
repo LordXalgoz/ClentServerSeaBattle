@@ -98,15 +98,38 @@ public class Controller {
         return ShootToField(i,j,firstPlayerMyField,secondPlayerShootField);
     }
 
-    public String GetFieldInString() {
-        String output = "";
+    private String GetFieldInString(char[][] myField,char[][] shootField) {
+        String output = "My field: \n";
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
-                output += firstPlayerMyField[fieldSize][fieldSize];
+                output += myField[fieldSize][fieldSize];
             }
             output += "\n";
+
+        }
+        output += "\n";
+        output += "\n";
+        output += "\n";
+        output += "Shoot field: \n";
+
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                output += shootField[fieldSize][fieldSize];
+            }
+            output += "\n";
+
         }
         return output;
+    }
+
+    public String GetFirstPlayerFields()
+    {
+        return GetFieldInString(firstPlayerMyField, firstPlayerShootField);
+    }
+
+    public String GetSecondPlayerFields()
+    {
+        return GetFieldInString(secondPlayerMyField, secondPlayerShootField);
     }
 
     public String GetGameResult() {
