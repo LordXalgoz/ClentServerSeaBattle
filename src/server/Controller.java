@@ -25,6 +25,7 @@ public class Controller {
 
     private final String WIN_FIRST_PLAYER = "First player wins";
     private final String WIN_SECOND_PLAYER = "First second wins";
+    private final String CONTINUE_GAME = "Continue game";
 
     public Controller() {
         firstPlayerMyField = new char[fieldSize][fieldSize];
@@ -68,38 +69,71 @@ public class Controller {
         }
     }
 
-    private boolean ShootToField(int i, int j, char[][] myField, char[][] shootField) {
+    private int ShootToField(int i, int j, char[][] myField, char[][] shootField) {
         if (i < 0 || i > fieldSize - 1 || j < 0 || j > fieldSize - 1) {
-            return false;
+            return 0;
         }
         if (myField[i][j] == SHIP || myField[i][j] == MISS) {
-            return false;
+            return 0;
         }
 
         if (myField[i][j] == SHIP) {
             myField[i][j] = ATTACK;
             shootField[i][j] = ATTACK;
-            return true;
+            return 1;
         }
         if (myField[i][j] == EMPTY) {
             myField[i][j] = MISS;
             shootField[i][j] = MISS;
+            return 2;
+        }
+
+        return -1;
+    }
+
+    public boolean FirstPlayerShootToSecondPlayer(int i, int j){
+        int result = ShootToField(i,j,secondPlayerMyField,firstPlayerShootField);
+        if(result == 0)
+        {
+            return false;
+        }
+        if(result == 1)
+        {
+            killFirstPlayer++;
+            aliveSecondPlayer--;
+            return true;
+        }
+        if(result == 2)
+        {
             return true;
         }
 
         return false;
     }
 
-    public boolean FirstPlayerShootToSecondPlayer(int i, int j){
-        return ShootToField(i,j,secondPlayerMyField,firstPlayerShootField);
-    }
-
     public boolean SecondPlayerShootToFirstPlayer(int i, int j){
-        return ShootToField(i,j,firstPlayerMyField,secondPlayerShootField);
+        int result = ShootToField(i,j,firstPlayerMyField,secondPlayerShootField);
+        if(result == 0)
+        {
+            return false;
+        }
+        if(result == 1)
+        {
+            killSecondPlayer++;
+            aliveFirstPlayer--;
+            return true;
+        }
+        if(result == 2)
+        {
+            return true;
+        }
+
+        return false;
     }
 
-    private String GetFieldInString(char[][] myField,char[][] shootField) {
-        String output = "My field: \n";
+    private String GetFieldInString(char[][] myField,char[][] shootField, int aliveShips, int killShips) {
+        String output = "My field alive ships: "+aliveShips+"\n";
+
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
                 output += myField[fieldSize][fieldSize];
@@ -110,7 +144,7 @@ public class Controller {
         output += "\n";
         output += "\n";
         output += "\n";
-        output += "Shoot field: \n";
+        output += "Shoot field kill ships: "+killShips+"\n";
 
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
@@ -124,21 +158,25 @@ public class Controller {
 
     public String GetFirstPlayerFields()
     {
-        return GetFieldInString(firstPlayerMyField, firstPlayerShootField);
+        return GetFieldInString(firstPlayerMyField, firstPlayerShootField, aliveFirstPlayer, killFirstPlayer);
     }
 
     public String GetSecondPlayerFields()
     {
-        return GetFieldInString(secondPlayerMyField, secondPlayerShootField);
+        return GetFieldInString(secondPlayerMyField, secondPlayerShootField, aliveSecondPlayer, killSecondPlayer);
     }
 
-    public String GetGameResult() {
-        if (secondPlayer == 0) {
+    public String GetGameResult()
+    {
+        if (aliveSecondPlayer == 0) {
             return WIN_FIRST_PLAYER;
         }
-        if (firstPlayer == 0) {
+
+        if (aliveFirstPlayer == 0) {
             return WIN_SECOND_PLAYER;
         }
+
+        return CONTINUE_GAME;
     }
 
 
