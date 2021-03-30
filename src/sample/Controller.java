@@ -1,30 +1,42 @@
 package sample;
 
+import java.util.Random;
+
 public class Controller
 {
-    private int fieldSize;
-    private char[][] field;
+    private final int fieldSize = 10;
+    private char[][] firstPlayerMyField;
+    private char[][] secondPlayerMyField;
+    private char[][] firstPlayerShootField;
+    private char[][] secondPlayerShootField;
 
     private final char EMPTY = '*';
     private final char ATTACK = 'X';
     private final char SHIP = 'K';
     private final char MISS = 'O';
 
-    private int singleShips=4;
-    private int doubleShips=3;
-    private int threeShips=2;
-    private int fourShips=1;
+    private final int singleShips=10;
 
-    private int firstPlayer = 20;
-    private int secondPlayer = 20;
+    private int aliveFirstPlayer;
+    private int killFirstPlayer;
+    private int aliveSecondPlayer;
+    private int killSecondPlayer;
+
+    private final Random random = new Random();
 
     private final String WIN_FIRST_PLAYER = "First player wins";
     private final String WIN_SECOND_PLAYER = "First second wins";
 
     public Controller()
     {
-        fieldSize = 10;
-        field = new char[fieldSize][fieldSize];
+        firstPlayerMyField = new char[fieldSize][fieldSize];
+        secondPlayerMyField = new char[fieldSize][fieldSize];
+
+
+        killFirstPlayer = 0;
+        killSecondPlayer = 0;
+        aliveFirstPlayer = singleShips;
+        aliveSecondPlayer = singleShips;
     }
 
     public void ClearField()
@@ -33,7 +45,7 @@ public class Controller
         {
             for (int j = 0; j < fieldSize; j++)
             {
-                field[i][j]=EMPTY;
+                firstPlayerMyField[i][j]=EMPTY;
             }
         }
     }
@@ -44,15 +56,15 @@ public class Controller
         {
             for (j = 0; j < fieldSize; j++)
             {
-                if(field[i][j]!=SHIP || field[i+1][j]!=SHIP || field[i][j+1]!=SHIP
+                if(firstPlayerMyField[i][j]!=SHIP || firstPlayerMyField[i+1][j]!=SHIP || firstPlayerMyField[i][j+1]!=SHIP
                         ||
-                        field[i-1][j]!=SHIP || field[i][j-1]!=SHIP
+                        firstPlayerMyField[i-1][j]!=SHIP || firstPlayerMyField[i][j-1]!=SHIP
                         ||
-                        field[i+1][j+1]!=SHIP || field[i-1][j-1]!=SHIP
+                        firstPlayerMyField[i+1][j+1]!=SHIP || firstPlayerMyField[i-1][j-1]!=SHIP
                         ||
-                        field[i+1][j-1]!=SHIP || field[i-1][j+1]!=SHIP)
+                        firstPlayerMyField[i+1][j-1]!=SHIP || firstPlayerMyField[i-1][j+1]!=SHIP)
                 {
-                    field[i][j]=SHIP;
+                    firstPlayerMyField[i][j]=SHIP;
                 }
             }
         }
@@ -64,13 +76,13 @@ public class Controller
         {
             for (j = 0; j < fieldSize; j++)
             {
-                if(field[i][j]==SHIP)
+                if(firstPlayerMyField[i][j]==SHIP)
                 {
-                    field[i][j]=ATTACK;
+                    firstPlayerMyField[i][j]=ATTACK;
                 }
                 else
                 {
-                    field[i][j]=MISS;
+                    firstPlayerMyField[i][j]=MISS;
                 }
             }
         }
@@ -83,7 +95,7 @@ public class Controller
         {
             for (int j = 0; j < fieldSize; j++)
             {
-                output+=field[fieldSize][fieldSize];
+                output+= firstPlayerMyField[fieldSize][fieldSize];
             }
             output+="\n";
         }
@@ -100,7 +112,6 @@ public class Controller
         {
             return WIN_SECOND_PLAYER;
         }
-        return ;
     }
 
 
