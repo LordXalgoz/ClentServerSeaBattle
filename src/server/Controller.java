@@ -136,7 +136,7 @@ public class Controller {
 
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
-                output += myField[fieldSize][fieldSize];
+                output += myField[i][j];
             }
             output += "\n";
 
@@ -148,7 +148,7 @@ public class Controller {
 
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
-                output += shootField[fieldSize][fieldSize];
+                output += shootField[i][j];
             }
             output += "\n";
 
